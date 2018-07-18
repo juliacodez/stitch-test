@@ -17,9 +17,9 @@
 
 <body>
 
-  <form id="Login">
+  <form id="login">
     <h1>Login</h1>
-    <input type="text" name="username" value=""/>
+    <input type="text" name="username" value="" />
     <input type="submit" value="Login" />
   </form>
 
@@ -62,9 +62,42 @@
         return USER_JWT;
       }
 
-      setupConversationEvents() {
-        this.loginForm.addEventListener('submit', (event) =>{
+      setupConversationEvents(conversation) {
+        this.conversation = conversation;
+        console.log('*** Conversation Retrieved', conversation);
+        console.log('*** Conversation Member', conversation.me);
+
+        // Bind to events on the conversation
+        conversation.on('text', (sender, message) => {
+          console.log('*** Message Received', sender, message);
+          const date = new Date(Date.parse(message.timestamp));
+          const text = '&{sender.user.name} @ ${date}: <b>${message.body.text}</b><br>';
+          this.messageFeed.innerHTML = text + this.messageFeed.innerHTML;
+        })
+      }
+
+      joinConversation(userToken) {
+        new ConversationClient({debug: false})
+          .login(userToken)
+          .then(app => {
+            console.log('*** Logged into app', app);
+            return app.getConversation(CONVETRSATION_ID);
+          })
+          .then(this.setupConversationEvents.bind(this))
+          .catch(this.errorLogger)
+      }
+
+      setupUserEvents() {
+        this.sendButton.addEventListener('click', () => {
+          this.conversation.sendText(this.messageTextarea.value).then(() => {
+            this.eventLogger('text')();
+            this.messageTextarea.value = '';
+          }).catch(this.errorLogger)
+        })
+
+        this.loginForm.addEventListener('submit', (event) => {
           event.preventDefault();
+          event.preventDefault()
           const userToken = this.authenticate();
           console.log(userToken);
           if (userToken) {
@@ -74,18 +107,6 @@
           }
         })
       }
-
-      joinConversation(userToken) {
-        new ConversationClient({ debug: false })
-          .login(userToken)
-          .then(app => {
-            console.log('*** Logged into app', app);
-            return app.getConversation(CONVETRSATION_ID);
-          })
-          .catch(this.errorLogger)
-      }
-
-      setupUserEvents() {}
     }
 
     new ChatApp()
