@@ -72,7 +72,7 @@
         conversation.on('text', (sender, message) => {
           console.log('*** Message Received', sender, message);
           const date = new Date(Date.parse(message.timestamp));
-          const text = '&{sender.user.name} @ ${date}: <b>${message.body.text}</b><br>';
+          const text = `${sender.user.name} @ ${date}: <b>${message.body.text}</b><br>`;
           this.messageFeed.innerHTML = text + this.messageFeed.innerHTML;
         })
       }
@@ -82,9 +82,16 @@
           .login(userToken)
           .then(app => {
             console.log('*** Logged into app', app);
-            return app.getConversation(CONVETRSATION_ID);
+            return app.getConversation(CONVERSATION_ID);
+
           })
           .then(this.setupConversationEvents.bind(this))
+          .then(
+            () => {
+              document.getElementById('messages').style.display = 'block';
+              document.getElementById('login').style.display = 'none';
+            }
+          )
           .catch(this.errorLogger)
       }
 
@@ -101,8 +108,7 @@
           const userToken = this.authenticate();
           console.log(userToken);
           if (userToken) {
-            document.getElementById('messages').style.display = 'block';
-            document.getElementById('login').style.display = 'none';
+
             this.joinConversation(userToken);
           }
         })
