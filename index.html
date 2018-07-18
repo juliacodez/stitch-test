@@ -78,7 +78,10 @@
       joinConversation(userToken) {
         new ConversationClient({ debug: false })
           .login(userToken)
-          .then(app => console.log('*** Logged into app', app))
+          .then(app => {
+            console.log('*** Logged into app', app);
+            return app.getConversation(CONVETRSATION_ID);
+          })
           .catch(this.errorLogger)
       }
 
