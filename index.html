@@ -13,6 +13,7 @@
       display: none;
     }
   </style>
+  <script src="./node_modules/nexmo-stitch/dist/conversationClient.js"></script>
 </head>
 
 <body>
@@ -33,7 +34,7 @@
     <button id="send">Send</button>
   </section>
 
-  <script src="./node_modules/nexmo-stitch/dist/conversationClient.js">
+  <script>
     const USER_JWT =
       'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE1MzE4OTYyMTEsImp0aSI6ImUyYmI5ZTgwLThhNTUtMTFlOC05N2RiLWZmNzkyZmI0MDdkOSIsInN1YiI6ImphbmUiLCJleHAiOjE1MzE5ODI2MTEsImFjbCI6eyJwYXRocyI6eyIvdjEvdXNlcnMvKioiOnt9LCIvdjEvY29udmVyc2F0aW9ucy8qKiI6e30sIi92MS9zZXNzaW9ucy8qKiI6e30sIi92MS9kZXZpY2VzLyoqIjp7fSwiL3YxL2ltYWdlLyoqIjp7fSwiL3YzL21lZGlhLyoqIjp7fSwiL3YxL2FwcGxpY2F0aW9ucy8qKiI6e30sIi92MS9wdXNoLyoqIjp7fSwiL3YxL2tub2NraW5nLyoqIjp7fX19LCJhcHBsaWNhdGlvbl9pZCI6ImJhMWU1M2FhLTMxZmQtNDI4MC04YTk3LTdkYmJmOGZiZGVkOSJ9.nJKydomwNUBs5Yan4ud2KFbYxAbuL3Ffu_I4XlXinS3Jn1ykHWG2Gy66_L5UbIu4rHZVvzZYZjlSNaDenUV9eOL3Xzsa-tytIAyO26aABAI57JWzqCYCSUlnNPRd4tQbIYdShBv71UQBy9orZBjvPZ8XULHd9eeHCBJM0s54CXAjS1xHLJBc4L3O1s6LG9REXaiK8O79I8FVqk7uqzbJlwNitUeFsfB1o7FzTvz04Z_v-tGG9x-vLRciXY9lZYpDnvRQUfV3ULWJdCzk-jliuBw3-tVUx4hX_v8xX1TDQIVJIQO8d1zAj_eZeo025xDhmZyYpiYTHz5QVKa63HzxOg';
     const CONVERSATION_ID = 'CON-f63c61ba-ebae-44c4-abd9-c2081860ffe6';
@@ -77,9 +78,7 @@
       }
 
       joinConversation(userToken) {
-        new ConversationClient({
-            debug: false
-          })
+        new ConversationClient({debug: false})
           .login(userToken)
           .then(app => {
             console.log('*** Logged into app', app);
@@ -99,7 +98,6 @@
 
         this.loginForm.addEventListener('submit', (event) => {
           event.preventDefault();
-          event.preventDefault()
           const userToken = this.authenticate();
           console.log(userToken);
           if (userToken) {
