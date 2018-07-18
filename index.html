@@ -77,7 +77,9 @@
       }
 
       joinConversation(userToken) {
-        new ConversationClient({debug: false})
+        new ConversationClient({
+            debug: false
+          })
           .login(userToken)
           .then(app => {
             console.log('*** Logged into app', app);
